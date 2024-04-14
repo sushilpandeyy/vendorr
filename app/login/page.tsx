@@ -1,20 +1,28 @@
 "use client";
 
-import type { NextRequest } from "next/server";
-import { signIn, useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 
 export default function Login() {
   const { data: session } = useSession();
+  const router = useRouter();
+
   if (session) {
-    redirect("/admin");
+    // Redirect to the login page if the user is not logged in
+    router.push("/admin");
+    return null;
   }
+  const handleGoogleSignIn = () => {
+    signIn("google");
+  };
 
   return (
-    <div>
-      <p>This is login page - public route</p>
-      <button onClick={() => signIn("github")}>Sign in with github</button>
-      <button onClick={() => signIn("google")}>Sign in with google</button>
+    <div className="container">
+      <h1 className="heading">Vendor Management</h1>
+      <button className="button" onClick={handleGoogleSignIn}>
+        Sign in with Google
+      </button>
     </div>
   );
 }

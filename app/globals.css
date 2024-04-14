@@ -1,33 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Home.module.css */
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+/* Style for the container */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* 100% of the viewport height */
+  background-color: #1a202c; /* Dark gray background */
+  color: white; /* White text */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+/* Style for the heading */
+.heading {
+  margin-bottom: 1.5rem; /* Space between heading and button */
+  font-size: 2rem;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+/* Style for the button */
+.button {
+  padding: 1rem 1.5rem;
+  background-color: #3182ce; /* Blue background */
+  color: white; /* White text */
+  font-weight: 600; /* Semi-bold */
+  border-radius: 0.5rem; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow */
+  transition: background-color 0.2s; /* Smooth transition */
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* Hover effect for the button */
+.button:hover {
+  background-color: #2b6cb0; /* Darker blue */
 }

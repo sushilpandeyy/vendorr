@@ -10,6 +10,7 @@ export const authOptions: AuthOptions = {
       clientSecret: process.env.GG_SECRET as string,
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET as string,
 };
 
 const handler = NextAuth(authOptions);
