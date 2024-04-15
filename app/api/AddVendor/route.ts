@@ -78,8 +78,10 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-      const req = await request.json();
-      const { id } = req;
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id'); 
+    
+      console.log(id)
       if (!id) {
           return NextResponse.json({ error: 'Vendor ID is required' }, { status: 400 });
       }

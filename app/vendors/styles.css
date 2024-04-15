@@ -4,7 +4,6 @@
   margin: 0 auto;
 }
 
-/* Navbar styles */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -12,11 +11,15 @@
   margin-bottom: 16px;
 }
 
-/* Add Vendor button container styles */
 .add-vendor-button-container {
   display: flex;
   justify-content: flex-end; /* Align button to the right */
   margin-bottom: 16px;
+}
+a {
+  text-decoration: none; /* Removes underline */
+  color: inherit; /* Inherits color from the parent element */
+  transition: color 0.3s; /* Optional: adds a transition effect for color changes */
 }
 
 .add-vendor-button {

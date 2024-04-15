@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import './styles.css';
 import AddVendorForm from '../components/form';
 import axios from 'axios';
-
+import Link from 'next/link';
 
 interface Vendor {
   id: string;
@@ -33,6 +33,8 @@ const Admin: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showAddVendorForm, setShowAddVendorForm] = useState<boolean>(false);
+  const [showDeletePopup, setShowDeletePopup] = useState<boolean>(false);
+  const [vendorIdToDelete, setVendorIdToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     fetchVendors(currentPage, emaill);
@@ -52,17 +54,14 @@ const Admin: React.FC = () => {
         setTotalPages(data.totalPages);
     } catch (error) {
         console.error('Error fetching vendors:', error);
-        // Handle error accordingly
     }
 };
 
   const handleAddVendor = () => {
-    // Toggle the visibility of the Add Vendor form
     setShowAddVendorForm(true);
   };
 
   const handleAddVendorSubmit = async (formData: any) => {
-    // Submit the form data to the server
     const response = await fetch('/api/vendors', {
       method: 'POST',
       headers: {
@@ -78,13 +77,24 @@ const Admin: React.FC = () => {
     }
   };
 
-  const handleEditVendor = (id: string) => {
-    // Handle editing a vendor
+
+  const handleDeleteVendor = async (id: string): Promise<void> => {
+    try {
+        await axios.delete(`/api/AddVendor?id=${id}`);
+        fetchVendors(currentPage, emaill);
+        setShowDeletePopup(false);
+    } catch (error) {
+        console.error('Error deleting vendor:', error);
+    }
+};
+  const confirmDelete = (vendorId: string): void => {
+    setVendorIdToDelete(vendorId);
+    setShowDeletePopup(true);
   };
 
-  const handleDeleteVendor = async (id: string) => {
-    await fetch(`/api/vendors/${id}`, { method: 'DELETE' });
-    fetchVendors(currentPage, emaill);
+  const cancelDelete = (): void => {
+    setVendorIdToDelete(null);
+    setShowDeletePopup(false);
   };
 
   return (
@@ -114,28 +124,45 @@ const Admin: React.FC = () => {
       )}
 
       <div className="vendor-card-container">
-        {vendors.map((vendor) => (
-          <div key={vendor.id} className="vendor-card">
-            <h3 className="vendor-card-title">{vendor.name}</h3>
-            <p><strong>Bank Account No.:</strong> {vendor.bankAccountNumber}</p>
-            <p><strong>Bank Name:</strong> {vendor.bankName}</p>
-            <p><strong>Address:</strong> {vendor.addressLine1}, {vendor.addressLine2}, {vendor.city}, {vendor.country}, {vendor.zipCode}</p>
-            <div className="action-buttons">
-              <button
-                className="edit-button"
-                onClick={() => handleEditVendor(vendor.id)}
-              >
+      {vendors.map((vendor) => (
+        
+    <div key={vendor.id} className="vendor-card">
+         <h3 className="vendor-card-title">
+            {vendor.name}
+        </h3>
+        <p><strong>Bank Account No.:</strong> {vendor.bankAccountNumber}</p>
+        <p><strong>Bank Name:</strong> {vendor.bankName}</p>
+        <p><strong>Address:</strong> {vendor.addressLine1}, {vendor.addressLine2}, {vendor.city}, {vendor.country}, {vendor.zipCode}</p>
+        <div className="action-buttons">
+        <Link href={`/vendors/${vendor.id}`}>  <button
+                className="edit-button">
                 Edit
-              </button>
-              <button
+            </button> </Link>
+            <button
                 className="delete-button"
-                onClick={() => handleDeleteVendor(vendor.id)}
-              >
+                onClick={() => confirmDelete(vendor.id)}
+            >
                 Delete
+            </button>
+        </div>
+   
+    </div>
+))}
+{showDeletePopup && vendorIdToDelete && (
+        <div className="popup-overlay">
+          <div className="popup-form">
+            <h3>Are you sure you want to delete this vendor?</h3>
+            <div className="action-buttons">
+              <button className="confirm-button" onClick={() => handleDeleteVendor(vendorIdToDelete)}>
+                Yes, Delete
+              </button>
+              <button className="cancel-button" onClick={cancelDelete}>
+                Cancel
               </button>
             </div>
           </div>
-        ))}
+        </div>
+      )}
       </div>
 
       <div className="pagination">
@@ -155,6 +182,8 @@ const Admin: React.FC = () => {
           Next
         </button>
       </div>
+
+      
     </div>
   );
 };
