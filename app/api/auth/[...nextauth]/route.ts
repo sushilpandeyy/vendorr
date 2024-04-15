@@ -1,12 +1,11 @@
 import NextAuth from 'next-auth';
-import type { AuthOptions } from 'next-auth';
+import type { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// Define the authentication options
-export const authOptions: AuthOptions = {
+export const authOptions: NextAuthOptions = {
     providers: [
         GoogleProvider({
             clientId: process.env.GG_ID as string,
@@ -38,8 +37,8 @@ export const authOptions: AuthOptions = {
     },
 };
 
-// Create the handler with NextAuth
+// Create the NextAuth handler with the authOptions
 const handler = NextAuth(authOptions);
 
-// Export the handler as the GET and POST methods of the API route
-export { handler as GET, handler as POST };
+// Export the handler as the default export from the file
+export default handler;
