@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import './formStyles.css';
@@ -7,7 +8,6 @@ import LoadingComponent from '../../components/Loading';
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 
 interface FormData {
     id?: string;
@@ -30,17 +30,8 @@ interface VendorFormProps {
 const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
     const { data: session } = useSession();
     const router = useRouter();
-    const pathname = usePathname();
-    const Vendorid = pathname?.split('/vendors/')[1] || null;
+
     
-    if (!session) {
-        // Use a return statement at the top level if the session is missing
-        router.push("/");
-        return null;
-    }
-
-    const userEmail = session.user?.email || '';
-
     const [formData, setFormData] = useState<FormData>({
         name: '',
         bankAccountNumber: '',
@@ -50,18 +41,16 @@ const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
         city: '',
         country: '',
         zipCode: '',
-        userEmail,
+        userEmail: session?.user?.email || '',
     });
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    // Ensure the useEffect hook is not dependent on `Vendorid` being null.
-    // Perform the fetch operation in the hook directly.
     useEffect(() => {
-        if (Vendorid) {
+        if (id) {
             setLoading(true);
-            axios.get(`/api/AddVendor?id=${Vendorid}`)
+            axios.get(`/api/AddVendor?id=${id}`)
                 .then(response => {
                     setFormData(response.data);
                     setLoading(false);
@@ -71,10 +60,13 @@ const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
                     setError('Failed to fetch vendor data. Please try again.');
                     setLoading(false);
                 });
-        } else {
-            setLoading(false); // Ensure loading is set to false if no Vendorid
         }
-    }, [Vendorid]);
+    }, [id]);
+
+    if (!session) {
+        router.push("/");
+        return null;
+    }
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
@@ -86,12 +78,10 @@ const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
         setError(null);
 
         try {
-            const response = await axios.put(`/api/AddVendor?id=${Vendorid}`, formData);
+            const response = await axios.put(`/api/AddVendor?id=${id}`, formData);
             console.log('Vendor updated successfully:', response.data);
             setError('UPDATED');
-            // Consider using a state variable to trigger re-rendering rather than reloading the page
-            // window.location.reload(); -- possibly not ideal in React
-            onSubmit(formData);
+            window.location.reload();
         } catch (error) {
             console.error('Error updating vendor:', error);
             setError('Failed to update vendor. Please try again.');
@@ -108,7 +98,6 @@ const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
                     {error && <p className="error">{error}</p>}
 
                     <form onSubmit={handleSubmit}>
-                        {/* Form fields */}
                         <div className="form-group">
                             <label htmlFor="name">Vendor Name</label>
                             <input
@@ -205,7 +194,6 @@ const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
                         <button type="submit" className="submit-btn">
                             Update Vendor
                         </button>
-
                         <div className="margin"></div>
                         <Link href="/vendors">
                             <button type="button" className="submit-btn">
