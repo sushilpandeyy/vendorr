@@ -7,6 +7,7 @@ import './formStyles.css';
 import '../styles.css';
 import LoadingComponent from '../../components/Loading';
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface FormData {
     id?: string;
@@ -24,7 +25,7 @@ interface FormData {
 
 export default function VendorForm(){
     const pathname = usePathname();
-    
+    const router = useRouter();
     function getIdFromPath(path: string): string {
         const startIndex: number = 9;
         if (startIndex !== -1) {
@@ -86,6 +87,7 @@ export default function VendorForm(){
             console.log('Vendor updated successfully:', response.data);
             setError('UPDATED');
             window.location.reload();
+            router.push("/vendors");
         } catch (error) {
             console.error('Error updating vendor:', error);
             setError('Failed to update vendor. Please try again.');
