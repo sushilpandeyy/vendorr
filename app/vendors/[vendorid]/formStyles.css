@@ -29,8 +29,8 @@ h2 {
 .form-group input {
     width: 100%;
     padding: 10px;
-    border: 1px solid #555; /* Darker border color */
-    background-color: #444; /* Dark input background color */
+    border: 1px solid #555;  
+    background-color: #444;  
     border-radius: 4px;
     box-sizing: border-box;
     color: #f0f0f0; 
@@ -38,9 +38,9 @@ h2 {
 
 .submit-btn {
     width: 100%;
-    padding: 10px;
-    background-color: #4caf50; /* Maintain green background */
-    color: white; /* Keep white text */
+    padding: 100px;
+    background-color: #4caf50; 
+    color: white; 
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -55,4 +55,7 @@ h2 {
     color: red;
     text-align: center;
     margin-bottom: 20px;
+}
+.margin{
+    margin: 10px;
 }
