@@ -39,10 +39,11 @@ const Admin: React.FC = () => {
     }
 
     const email = session?.user?.email || '';
-
     useEffect(() => {
-        fetchVendors(currentPage, email);
-    }, [currentPage, email]);
+        if (session) {
+            fetchVendors(currentPage, email);
+        }
+    }, [currentPage, email, session]);
 
     const fetchVendors = async (page: number, userEmail: string) => {
         setLoading(true);
