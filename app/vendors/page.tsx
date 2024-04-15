@@ -21,15 +21,19 @@ interface Vendor {
 }
 
 const Admin: React.FC = () => {
+    // Hooks must be called at the top level of the function component
     const { data: session } = useSession();
     const router = useRouter();
-
+    
+    // Early return if the session does not exist
     if (!session) {
         router.push('/');
         return null;
     }
 
     const emaill = session?.user?.email || "";
+
+    // Hook definitions
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -38,9 +42,10 @@ const Admin: React.FC = () => {
     const [vendorIdToDelete, setVendorIdToDelete] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
+    // Effect hook for fetching vendors data
     useEffect(() => {
         fetchVendors(currentPage, emaill);
-    }, [currentPage]);
+    }, [currentPage, emaill]);
 
     const fetchVendors = async (page: number, userEmail: string) => {
         setLoading(true); // Start loading
@@ -129,30 +134,30 @@ const Admin: React.FC = () => {
                 />
             )}
 
-<div className="vendor-card-container">
-    {loading ? (
-        <LoadingComponent /> 
-    ) : vendors.length === 0 ? (
-        <p className="no-vendors-message">Zero Vendor's in this account</p>
-    ) : (
-        vendors.map((vendor) => (
-            <div key={vendor.id} className="vendor-card">
-                <h3 className="vendor-card-title">{vendor.name}</h3>
-                <p><strong>Bank Account No.:</strong> {vendor.bankAccountNumber}</p>
-                <p><strong>Bank Name:</strong> {vendor.bankName}</p>
-                <p><strong>Address:</strong> {`${vendor.addressLine1}, ${vendor.addressLine2 || ''}, ${vendor.city}, ${vendor.country}, ${vendor.zipCode}`}</p>
-                <div className="action-buttons">
-                    <Link href={`/vendors/${vendor.id}`}>
-                        <button className="edit-button">Edit</button>
-                    </Link>
-                    <button className="delete-button" onClick={() => confirmDelete(vendor.id)}>
-                        Delete
-                    </button>
-                </div>
+            <div className="vendor-card-container">
+                {loading ? (
+                    <LoadingComponent />
+                ) : vendors.length === 0 ? (
+                    <p className="no-vendors-message">Zero Vendor's in this account</p>
+                ) : (
+                    vendors.map((vendor) => (
+                        <div key={vendor.id} className="vendor-card">
+                            <h3 className="vendor-card-title">{vendor.name}</h3>
+                            <p><strong>Bank Account No.:</strong> {vendor.bankAccountNumber}</p>
+                            <p><strong>Bank Name:</strong> {vendor.bankName}</p>
+                            <p><strong>Address:</strong> {`${vendor.addressLine1}, ${vendor.addressLine2 || ''}, ${vendor.city}, ${vendor.country}, ${vendor.zipCode}`}</p>
+                            <div className="action-buttons">
+                                <Link href={`/vendors/${vendor.id}`}>
+                                    <button className="edit-button">Edit</button>
+                                </Link>
+                                <button className="delete-button" onClick={() => confirmDelete(vendor.id)}>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
-        ))
-    )}
-</div>
 
             {showDeletePopup && vendorIdToDelete && (
                 <div className="popup-overlay">
