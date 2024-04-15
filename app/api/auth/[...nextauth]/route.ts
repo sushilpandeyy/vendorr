@@ -14,7 +14,7 @@ export const authOptions: NextAuthOptions = {
     ],
     secret: process.env.NEXTAUTH_SECRET as string,
     callbacks: {
-        async signIn({ account, profile }) {
+        async signIn({ account, profile }): Promise<boolean> {
             if (account?.provider === 'google') {
                 const email = profile?.email || '';
                 const existingUser = await prisma.user.findUnique({
@@ -37,8 +37,6 @@ export const authOptions: NextAuthOptions = {
     },
 };
 
-// Create the NextAuth handler with the authOptions
 const handler = NextAuth(authOptions);
 
-// Export the handler as the default export from the file
 export default handler;
