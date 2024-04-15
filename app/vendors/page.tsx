@@ -22,7 +22,13 @@ interface Vendor {
 }
 
 const Admin: React.FC = () => {
-    // Hook definitions
+    const [vendors, setVendors] = useState<Vendor[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [showAddVendorForm, setShowAddVendorForm] = useState<boolean>(false);
+    const [showDeletePopup, setShowDeletePopup] = useState<boolean>(false);
+    const [vendorIdToDelete, setVendorIdToDelete] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
     const { data: session } = useSession();
     const router = useRouter();
 
@@ -33,14 +39,6 @@ const Admin: React.FC = () => {
     }
 
     const email = session?.user?.email || '';
-
-    const [vendors, setVendors] = useState<Vendor[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    const [showAddVendorForm, setShowAddVendorForm] = useState<boolean>(false);
-    const [showDeletePopup, setShowDeletePopup] = useState<boolean>(false);
-    const [vendorIdToDelete, setVendorIdToDelete] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
 
     // Effect hook for fetching vendors data
     useEffect(() => {
