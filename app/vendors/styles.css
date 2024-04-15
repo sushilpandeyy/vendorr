@@ -1,0 +1,144 @@
+/* Admin container styles */
+.admin-container {
+  padding: 16px;
+  margin: 0 auto;
+}
+
+/* Navbar styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/* Add Vendor button container styles */
+.add-vendor-button-container {
+  display: flex;
+  justify-content: flex-end; /* Align button to the right */
+  margin-bottom: 16px;
+}
+
+.add-vendor-button {
+  background-color: #3182ce;
+  color: #f7fafc;
+  padding: 10px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.add-vendor-button:hover {
+  background-color: #2c5282;
+}
+
+/* Vendor card container styles */
+.vendor-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Vendor card styles */
+.vendor-card {
+  background-color: #2d3748; /* Dark background color */
+  color: #f7fafc; /* Light text color */
+  border-radius: 8px; /* Rounded corners */
+  padding: 16px; /* Padding inside the card */
+  width: calc(33.333% - 16px); /* Card width with gap compensation */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: transform 0.3s ease;
+}
+
+.vendor-card:hover {
+  transform: scale(1.05); /* Slight scale on hover */
+}
+
+/* Vendor card title */
+.vendor-card-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+/* Action buttons */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.edit-button, .delete-button {
+  background-color: #3182ce;
+  color: #f7fafc;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.edit-button:hover, .delete-button:hover {
+  background-color: #2c5282;
+}
+
+/* Pagination styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.pagination-button {
+  background-color: #3182ce;
+  color: #f7fafc;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.pagination-button:hover {
+  background-color: #2c5282;
+}
+/* Admin container styles */
+.admin-container {
+  padding: 16px;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+/* Navbar styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: #2d3748;
+  border-radius: 8px;
+}
+
+.navbar-title {
+  color: #f7fafc;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.sign-out-button {
+  background-color: #3182ce;
+  color: #f7fafc;
+  padding: 10px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.sign-out-button:hover {
+  background-color: #2c5282; /* Darker blue on hover */
+}

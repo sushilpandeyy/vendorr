@@ -1,16 +1,15 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const { data: session } = useSession();
   const router = useRouter();
 
   if (session) {
-    // Redirect to the login page if the user is not logged in
-    router.push("/admin");
+    router.push("/vendors");
     return null;
   }
   const handleGoogleSignIn = () => {

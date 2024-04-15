@@ -9,8 +9,7 @@ export default function Home() {
   const router = useRouter();
 
   if (session) {
-    // Redirect to the login page if the user is not logged in
-    router.push("/admin");
+    router.push("/vendors");
     return null;
   }
   const handleGoogleSignIn = () => {
@@ -19,10 +18,10 @@ export default function Home() {
 
   return (
     <div className="container">
-      <h1 className="heading">Vendor Management</h1>
-      <button className="button" onClick={handleGoogleSignIn}>
-        Sign in with Google
-      </button>
-    </div>
+  <h1 className="heading">Vendor Management</h1>
+  <button className="button" onClick={handleGoogleSignIn}>
+    Sign in with Google
+  </button>
+</div>
   );
 }
