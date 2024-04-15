@@ -30,22 +30,18 @@ const Admin: React.FC = () => {
     const [vendorIdToDelete, setVendorIdToDelete] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const { data: session } = useSession();
-    const router = useRouter();
-
-    // Early return if the session does not exist
-    if (!session) {
-        router.push('/');
-        return null;
-    }
-
     const email = session?.user?.email || '';
+    const router = useRouter();
     useEffect(() => {
         if (session) {
             fetchVendors(currentPage, email);
         }
     }, [currentPage, email, session]);
-
-    const fetchVendors = async (page: number, userEmail: string) => {
+    if (!session) {
+        router.push('/');
+        return null;
+    }
+     const fetchVendors = async (page: number, userEmail: string) => {
         setLoading(true);
         try {
             const response = await axios.get('/api/AllVendors', {
