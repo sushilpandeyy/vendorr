@@ -206,4 +206,6 @@ const VendorForm: React.FC<VendorFormProps> = ({ id }) => {
     );
 };
 
-export default VendorForm;
+export default function Page({ id }: VendorFormProps) {
+    return <VendorForm id={id} />;
+}
