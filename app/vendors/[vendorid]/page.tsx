@@ -1,5 +1,4 @@
-'use client'
-
+'use client';
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import './formStyles.css';
@@ -8,7 +7,7 @@ import LoadingComponent from '../../components/Loading';
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
-import { usePathname } from 'next/navigation'; // Import usePathname
+import { usePathname } from 'next/navigation';
 
 interface FormData {
     id?: string;
@@ -31,16 +30,15 @@ interface VendorFormProps {
 const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
     const { data: session } = useSession();
     const router = useRouter();
-    
-    // **Move hooks to the top of the component**
     const pathname = usePathname();
-    const Vendorid = pathname ? pathname.split('/vendors/')[1] : null;
-
+    const Vendorid = pathname?.split('/vendors/')[1] || null;
+    
     if (!session) {
+        // Use a return statement at the top level if the session is missing
         router.push("/");
         return null;
     }
-    
+
     const userEmail = session.user?.email || '';
 
     const [formData, setFormData] = useState<FormData>({
@@ -58,6 +56,8 @@ const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    // Ensure the useEffect hook is not dependent on `Vendorid` being null.
+    // Perform the fetch operation in the hook directly.
     useEffect(() => {
         if (Vendorid) {
             setLoading(true);
@@ -71,6 +71,8 @@ const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
                     setError('Failed to fetch vendor data. Please try again.');
                     setLoading(false);
                 });
+        } else {
+            setLoading(false); // Ensure loading is set to false if no Vendorid
         }
     }, [Vendorid]);
 
@@ -87,7 +89,9 @@ const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
             const response = await axios.put(`/api/AddVendor?id=${Vendorid}`, formData);
             console.log('Vendor updated successfully:', response.data);
             setError('UPDATED');
-            window.location.reload();
+            // Consider using a state variable to trigger re-rendering rather than reloading the page
+            // window.location.reload(); -- possibly not ideal in React
+            onSubmit(formData);
         } catch (error) {
             console.error('Error updating vendor:', error);
             setError('Failed to update vendor. Please try again.');
@@ -104,6 +108,7 @@ const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
                     {error && <p className="error">{error}</p>}
 
                     <form onSubmit={handleSubmit}>
+                        {/* Form fields */}
                         <div className="form-group">
                             <label htmlFor="name">Vendor Name</label>
                             <input
@@ -200,6 +205,7 @@ const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
                         <button type="submit" className="submit-btn">
                             Update Vendor
                         </button>
+
                         <div className="margin"></div>
                         <Link href="/vendors">
                             <button type="button" className="submit-btn">
