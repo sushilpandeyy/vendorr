@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import './formStyles.css';
@@ -169,7 +167,7 @@ const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
                             />
                         </div>
 
-                        <div className="form-group">
+                       <div className="form-group">
                             <label htmlFor="country">Country (Optional)</label>
                             <input
                                 type="text"
