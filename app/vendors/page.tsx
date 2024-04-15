@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
@@ -21,19 +22,18 @@ interface Vendor {
 }
 
 const Admin: React.FC = () => {
-    // Hooks must be called at the top level of the function component
+    // Hook definitions
     const { data: session } = useSession();
     const router = useRouter();
-    
+
     // Early return if the session does not exist
     if (!session) {
         router.push('/');
         return null;
     }
 
-    const emaill = session?.user?.email || "";
+    const email = session?.user?.email || '';
 
-    // Hook definitions
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -44,11 +44,11 @@ const Admin: React.FC = () => {
 
     // Effect hook for fetching vendors data
     useEffect(() => {
-        fetchVendors(currentPage, emaill);
-    }, [currentPage, emaill]);
+        fetchVendors(currentPage, email);
+    }, [currentPage, email]);
 
     const fetchVendors = async (page: number, userEmail: string) => {
-        setLoading(true); // Start loading
+        setLoading(true);
         try {
             const response = await axios.get('/api/AllVendors', {
                 params: {
@@ -62,7 +62,7 @@ const Admin: React.FC = () => {
         } catch (error) {
             console.error('Error fetching vendors:', error);
         } finally {
-            setLoading(false); // Stop loading
+            setLoading(false);
         }
     };
 
@@ -80,7 +80,7 @@ const Admin: React.FC = () => {
         });
 
         if (response.ok) {
-            fetchVendors(currentPage, emaill);
+            fetchVendors(currentPage, email);
             setShowAddVendorForm(false);
         } else {
             // Handle error response
@@ -90,7 +90,7 @@ const Admin: React.FC = () => {
     const handleDeleteVendor = async (id: string): Promise<void> => {
         try {
             await axios.delete(`/api/AddVendor?id=${id}`);
-            fetchVendors(currentPage, emaill);
+            fetchVendors(currentPage, email);
             setShowDeletePopup(false);
         } catch (error) {
             console.error('Error deleting vendor:', error);
@@ -130,7 +130,7 @@ const Admin: React.FC = () => {
                 <AddVendorForm
                     onClose={() => setShowAddVendorForm(false)}
                     onSubmit={handleAddVendorSubmit}
-                    Emailid={emaill}
+                    Emailid={email}
                 />
             )}
 
