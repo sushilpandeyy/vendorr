@@ -37,4 +37,8 @@ export const authOptions: NextAuthOptions = {
     },
 };
 
-export const GET = NextAuth(authOptions);
+export const getServerSideProps = NextAuth(authOptions);
+
+export default function Auth() {
+    // Your component code here
+}
