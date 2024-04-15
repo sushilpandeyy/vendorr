@@ -19,6 +19,7 @@ interface Vendor {
 
 const Admin: React.FC = () => {
   const { data: session } = useSession();
+  console.log(session?.user?.email);
   const router = useRouter();
 
   if (!session) {
