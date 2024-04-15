@@ -40,7 +40,6 @@ const Admin: React.FC = () => {
 
     const email = session?.user?.email || '';
 
-    // Effect hook for fetching vendors data
     useEffect(() => {
         fetchVendors(currentPage, email);
     }, [currentPage, email]);
