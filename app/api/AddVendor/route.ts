@@ -3,6 +3,28 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+export async function GET(request: NextRequest) {
+  try {
+      const { searchParams } = new URL(request.url);
+      const id = searchParams.get('id');
+      if (!id) {
+          return NextResponse.json({ error: 'Missing vendor ID' }, { status: 400 });
+      }
+      const vendor = await prisma.vendor.findUnique({
+          where: {
+              id: id,
+          },
+      });
+      if (!vendor) {
+          return NextResponse.json({ error: 'Vendor not found' }, { status: 404 });
+      }
+      return NextResponse.json(vendor, { status: 200 });
+  } catch (error) {
+      console.error('Error fetching vendor:', error);
+      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const req = await request.json();
@@ -17,7 +39,7 @@ export async function POST(request: NextRequest) {
         bankAccountNumber,
         bankName,
         addressLine1,
-        addressLine2: addressLine2 || null, // Handle optional fields
+        addressLine2: addressLine2 || null,
         city: city || null,
         country: country || null,
         zipCode: zipCode || null,
