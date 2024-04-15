@@ -23,11 +23,10 @@ interface FormData {
 }
 
 interface VendorFormProps {
-    onSubmit: (formData: FormData) => void;
     id?: string;
 }
 
-const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
+const VendorForm: React.FC<VendorFormProps> = ({ id }) => {
     const { data: session } = useSession();
     const router = useRouter();
 
