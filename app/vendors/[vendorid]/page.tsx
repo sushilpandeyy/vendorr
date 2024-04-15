@@ -3,12 +3,12 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import './formStyles.css';
-import { usePathname } from 'next/navigation';
 import '../styles.css';
-import LoadingComponent from '../../components/Loading'; // Import LoadingComponent
+import LoadingComponent from '../../components/Loading';
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
+import { usePathname } from 'next/navigation'; // Import usePathname
 
 interface FormData {
     id?: string;
@@ -29,26 +29,19 @@ interface VendorFormProps {
 }
 
 const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
-
     const { data: session } = useSession();
     const router = useRouter();
+    
+    // **Move hooks to the top of the component**
+    const pathname = usePathname();
+    const Vendorid = pathname ? pathname.split('/vendors/')[1] : null;
+
     if (!session) {
         router.push("/");
         return null;
     }
+    
     const userEmail = session.user?.email || '';
-
-    function getIdFromPath(path: string): string {
-        const searchTerm = '/vendors/';
-        const startIndex = path.indexOf(searchTerm) + searchTerm.length;
-        if (startIndex !== searchTerm.length - 1) {
-            return path.substring(startIndex);
-        }
-        return '';
-    }
-
-    const pathname = usePathname();
-    const Vendorid = getIdFromPath(pathname);
 
     const [formData, setFormData] = useState<FormData>({
         name: '',
@@ -62,21 +55,21 @@ const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
         userEmail,
     });
 
-    const [loading, setLoading] = useState(true); // Loading state
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         if (Vendorid) {
-            setLoading(true); // Set loading to true before fetching data
+            setLoading(true);
             axios.get(`/api/AddVendor?id=${Vendorid}`)
                 .then(response => {
                     setFormData(response.data);
-                    setLoading(false); // Set loading to false when data is fetched
+                    setLoading(false);
                 })
                 .catch(error => {
                     console.error('Error fetching vendor data:', error);
                     setError('Failed to fetch vendor data. Please try again.');
-                    setLoading(false); // Set loading to false on error
+                    setLoading(false);
                 });
         }
     }, [Vendorid]);
@@ -110,7 +103,6 @@ const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
                     <h2>Update Vendor</h2>
                     {error && <p className="error">{error}</p>}
 
-                    
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label htmlFor="name">Vendor Name</label>
@@ -205,14 +197,15 @@ const VendorForm: React.FC<VendorFormProps> = ({ onSubmit, id }) => {
                             />
                         </div>
 
-                        
                         <button type="submit" className="submit-btn">
                             Update Vendor
                         </button>
                         <div className="margin"></div>
-                        <Link href={"/vendors"}><button type="submit" className="submit-btn">
-                            Back
-                        </button></Link>
+                        <Link href="/vendors">
+                            <button type="button" className="submit-btn">
+                                Back
+                            </button>
+                        </Link>
                     </form>
                 </>
             )}
