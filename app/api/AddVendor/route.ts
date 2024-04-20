@@ -31,12 +31,17 @@ export async function POST(request: NextRequest) {
 
     const { name, bankAccountNumber, bankName, addressLine1, addressLine2, city, country, zipCode, userEmail } = req;
     if (!name || !bankAccountNumber || !bankName || !addressLine1 || !userEmail) {
-      console.log(req);
-      console.log(userEmail);
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
+    const Addedby = await prisma.user.findFirst({
+      where: {
+        email: userEmail,
+      }
+    })
+    const Addedbyy = Addedby?.name || " ";
     const newVendor = await prisma.vendor.create({
       data: {
+        Addedby: Addedbyy,
         name,
         bankAccountNumber,
         bankName,

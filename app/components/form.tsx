@@ -35,7 +35,7 @@ const AddVendorForm: React.FC<AddVendorFormProps> = ({ onClose, onSubmit, Emaili
       userEmail: Emailid,
     });
     
-    const [error, setError] = useState<string | null>(null); // State for error messages
+    const [error, setError] = useState<string | null>(null); 
   
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
       const { name, value } = e.target;
@@ -44,7 +44,7 @@ const AddVendorForm: React.FC<AddVendorFormProps> = ({ onClose, onSubmit, Emaili
   
     const handleSubmit = async (e: FormEvent): Promise<void> => {
       e.preventDefault();
-      setError(null); // Clear any previous error messages
+      setError(null); 
       
       try {
         const response = await axios.post('/api/AddVendor', formData);

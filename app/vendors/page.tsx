@@ -11,6 +11,7 @@ import LoadingComponent from '../components/Loading';
 
 interface Vendor {
     id: string;
+    Addedby: string;
     name: string;
     bankAccountNumber: string;
     bankName: string;
@@ -19,6 +20,7 @@ interface Vendor {
     city: string;
     country: string;
     zipCode: string;
+    userEmail: string;
 }
 
 const Admin: React.FC = () => {
@@ -34,19 +36,18 @@ const Admin: React.FC = () => {
     const router = useRouter();
     useEffect(() => {
         if (session) {
-            fetchVendors(currentPage, email);
+            fetchVendors(currentPage);
         }
     }, [currentPage, email, session]);
     if (!session) {
         router.push('/');
         return null;
     }
-     const fetchVendors = async (page: number, userEmail: string) => {
+     const fetchVendors = async (page: number) => {
         setLoading(true);
         try {
             const response = await axios.get('/api/AllVendors', {
                 params: {
-                    userEmail,
                     page,
                 },
             });
@@ -74,17 +75,16 @@ const Admin: React.FC = () => {
         });
 
         if (response.ok) {
-            fetchVendors(currentPage, email);
+            fetchVendors(currentPage);
             setShowAddVendorForm(false);
         } else {
-            // Handle error response
         }
     };
 
     const handleDeleteVendor = async (id: string): Promise<void> => {
         try {
             await axios.delete(`/api/AddVendor?id=${id}`);
-            fetchVendors(currentPage, email);
+            fetchVendors(currentPage);
             setShowDeletePopup(false);
         } catch (error) {
             console.error('Error deleting vendor:', error);
@@ -134,21 +134,30 @@ const Admin: React.FC = () => {
                 ) : vendors.length === 0 ? (
                     <p className="no-vendors-message">Zero Vendor's in this account</p>
                 ) : (
-                    vendors.map((vendor) => (
+                    vendors.map((vendor) => ((email==vendor.userEmail)?
                         <div key={vendor.id} className="vendor-card">
-                            <h3 className="vendor-card-title">{vendor.name}</h3>
-                            <p><strong>Bank Account No.:</strong> {vendor.bankAccountNumber}</p>
-                            <p><strong>Bank Name:</strong> {vendor.bankName}</p>
-                            <p><strong>Address:</strong> {`${vendor.addressLine1}, ${vendor.addressLine2 || ''}, ${vendor.city}, ${vendor.country}, ${vendor.zipCode}`}</p>
-                            <div className="action-buttons">
-                                <Link href={`/vendors/${vendor.id}`}>
-                                    <button className="edit-button">Edit</button>
-                                </Link>
-                                <button className="delete-button" onClick={() => confirmDelete(vendor.id)}>
-                                    Delete
-                                </button>
-                            </div>
-                        </div>
+    <h3 className="vendor-card-title">{vendor.name}</h3>
+    <p><strong>Bank Account No.:</strong> {vendor.bankAccountNumber}</p>
+    <p><strong>Bank Name:</strong> {vendor.bankName}</p>
+    <p><strong>Address:</strong> {`${vendor.addressLine1}, ${vendor.addressLine2 || ''}, ${vendor.city}, ${vendor.country}, ${vendor.zipCode}`}</p>
+    <p><strong>Added By:</strong> {vendor.Addedby} [You]</p>
+    <div className="action-buttons">
+        <Link href={`/vendors/${vendor.id}`}>
+            <button className="edit-button">Edit</button>
+        </Link>
+        <button className="delete-button" onClick={() => confirmDelete(vendor.id)}>
+            Delete
+        </button>
+    </div>
+</div>:<div key={vendor.id} className="vendor-card">
+    <h3 className="vendor-card-title">{vendor.name}</h3>
+    <p><strong>Bank Account No.:</strong> {vendor.bankAccountNumber}</p>
+    <p><strong>Bank Name:</strong> {vendor.bankName}</p>
+    <p><strong>Address:</strong> {`${vendor.addressLine1}, ${vendor.addressLine2 || ''}, ${vendor.city}, ${vendor.country}, ${vendor.zipCode}`}</p>
+    <p><strong>Added By:</strong> {vendor.Addedby}</p>
+</div>
+
+
                     ))
                 )}
             </div>

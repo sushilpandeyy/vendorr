@@ -19,6 +19,7 @@ model User {
 
 model Vendor {
   id                String  @id @default(uuid())
+  Addedby           String  @default("")
   name              String   
   bankAccountNumber String  
   bankName          String   
