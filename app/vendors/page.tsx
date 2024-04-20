@@ -43,6 +43,7 @@ const Admin: React.FC = () => {
         router.push('/');
         return null;
     }
+
      const fetchVendors = async (page: number) => {
         setLoading(true);
         try {
@@ -105,7 +106,7 @@ const Admin: React.FC = () => {
         <div className="admin-container">
             <nav className="navbar">
                 <div className="navbar-left">
-                    <h1 className="navbar-title">Vendor Management</h1>
+                    <h1 className="navbar-title">Vendors Data Management</h1>
                 </div>
                 <div className="navbar-right">
                     <button className="sign-out-button" onClick={() => signOut()}>
