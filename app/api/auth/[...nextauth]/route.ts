@@ -1,4 +1,3 @@
-
 import { authOptions } from "../provider";
 import NextAuth from "next-auth";
 
